@@ -1,0 +1,13 @@
+// Кастомный логгер: метод, URL, статус и время выполнения запроса
+module.exports = function logger(req, res, next) {
+  const start = process.hrtime.bigint();
+
+  res.on('finish', () => {
+    const ms = Number(process.hrtime.bigint() - start) / 1e6;
+    console.log(
+      `[${new Date().toISOString()}] ${req.method} ${req.originalUrl} ${res.statusCode} ${ms.toFixed(2)}ms`
+    );
+  });
+
+  next();
+};
